@@ -21,6 +21,7 @@ class DynamicComboBoxes(QtWidgets.QWidget):
         qbtn = QPushButton('Рассчитать', self)
         qbtn.clicked.connect(self.onBtnClick)
         self.itemlist = []
+        self.btncounter0 = 0
 
         vbox.addWidget(qbtn)
         vbox.addWidget(spinbox)
@@ -36,39 +37,26 @@ class DynamicComboBoxes(QtWidgets.QWidget):
             combobox.deleteLater()
         self.itemlist = []
         for i in range(val):
-            label = QtWidgets.QLabel('This is Label {}'.format(i))
+            label = QtWidgets.QLabel('This is Label {}'.format(i+1))
             combobox = QtWidgets.QComboBox()
             self.grid.addWidget(label, i, 0)
             self.grid.addWidget(combobox, i, 1)
             self.itemlist.append([label, combobox])
             # print(self.itemlist[i][1])
-        """
-        for 
+        nameslist = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"]
+        btncounter = self.btncounter0
+        while btncounter != combobox_need:
             try:
-                self.itemlist[i-1][1].addItems(["DEFAULT", "PATCH"])
-                self.itemlist[i][1].addItems(["1111", "2222"])
-            except:
-                print(Exception)
-            print("Завершение программы")
-        """
-        for i in range(2):
-            try:
-               # DynamicComboBoxes.itemlist[i - 1][1].addItems(["1", "2", "3", "4", "5"])
-                self.itemlist[0][1].addItems(["1"])
-                self.itemlist[1][1].addItems(["2"])
+                btncounter += 1
+
+                self.itemlist[btncounter-1][1].addItems([str(nameslist[btncounter-1])])
+                #self.itemlist[btncounter - 1][1].addItems([str(btncounter)])
             except:
                 print(Exception)
             print("Завершение программы")
 
     def onBtnClick(self):
-        for i in range(2):
-            try:
-               # DynamicComboBoxes.itemlist[i - 1][1].addItems(["1", "2", "3", "4", "5"])
-                self.itemlist[0][1].addItems(["1"])
-                self.itemlist[1][1].addItems(["2"])
-            except:
-                print(Exception)
-            print("Завершение программы")
+        pass
 
 
 if __name__ == '__main__':
