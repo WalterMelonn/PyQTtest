@@ -1,0 +1,148 @@
+import excel_reader as er
+import pandas as pd
+import sys
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QWidget, QPushButton, QApplication
+from PyQt5.QtCore import QCoreApplication
+
+combobox_need = er.excelRead.parameters_counter()
+
+
+class DynamicComboBoxes(QtWidgets.QWidget):
+    def __init__(self, parent=None):
+        super(DynamicComboBoxes, self).__init__(parent)
+        vbox = QtWidgets.QVBoxLayout(self)
+        spinbox = QtWidgets.QSpinBox(self)
+        spinbox.setRange(0, combobox_need)
+        spinbox.valueChanged.connect(self.onChangeValue)
+        combobox_need_class = combobox_need
+
+        qbtn = QPushButton('Рассчитать', self)
+        qbtn.clicked.connect(self.onBtnClick)
+        self.itemlist = []
+        self.btncounter0 = 0
+
+        vbox.addWidget(qbtn)
+        vbox.addWidget(spinbox)
+
+        self.grid = QtWidgets.QGridLayout()
+        self.itemlist = []
+        vbox.addLayout(self.grid)
+        vbox.addStretch(1)
+
+    def onChangeValue(self, val):
+        for label, combobox in self.itemlist:
+            label.deleteLater()
+            combobox.deleteLater()
+        self.itemlist = []
+        for i in range(val):
+            label = QtWidgets.QLabel('This is Label {}'.format(i + 1))
+            combobox = QtWidgets.QComboBox()
+            self.grid.addWidget(label, i, 0)
+            self.grid.addWidget(combobox, i, 1)
+            self.itemlist.append([label, combobox])
+
+        nameslist = [["1", "item"], ["2", "item"], ["3", "item"], ["4", "item"], ["5", "item"], ["6", "item"], ["7", "item"], ["8", "item"], ["9", "item"], ["10", "item"], ["11", "item"], ["12", "item"], ["13", "item"], ["14", "item"]]
+        btncounter = self.btncounter0
+        while btncounter != combobox_need:
+            try:
+                btncounter += 1
+                self.itemlist[btncounter - 1][1].addItems([str(nameslist[btncounter - 1])])
+            except:
+                print(Exception)
+            print("Завершение программы")
+
+    def onBtnClick(self):
+
+        mainDf = er.ReadEx.lltrsDf
+        list1 = []
+        combobox_need_func = 16  # self.combobox_need_class
+        # mainDf2 = pd.DataFrame()
+        try:
+            while combobox_need_func != 0:
+                for i in range(len(mainDf)):
+                    current_cell = mainDf.iloc[i, 0]
+                    if current_cell == 'X':
+                        # print("Мы поймали X")
+                        pass
+                    # list1.append("Разделить")
+                    else:
+                        # print("Мы поймали не Х")
+                        # print("Мы зашли в цикл заполнения списка данными")
+                        # print(mainDf.iloc[j, 2])
+                        list1.append(mainDf.iloc[i, 2])
+                        combobox_need_func -= 1
+                # else:
+                #     list1.append(current_cell)
+
+        except:
+            print("Во время выполнения считывания Excel произошла ошибка:", Exception)
+            print("Завершение программы считывания Excel")
+        print(list1)
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    box = DynamicComboBoxes()
+    box.show()
+    sys.exit(app.exec_())
+
+"""
+                    else:
+                        #print("Мы поймали не Х")
+                        j = 0
+                        while current_cell != 'X':
+                            #print("Мы зашли в цикл заполнения списка данными")
+                            #print(mainDf.iloc[j, 2])
+                            list1.append(mainDf.iloc[j, 2])
+                            j += 1
+                        combobox_need_func -= 1
+                    """
+=3. неудачные попытки создать чтение содержимого комбобоксов из экселя============================================================================
+"""
+        for current_cell in range(len(mainDf)):
+            cell_value = mainDf.iloc[current_cell, 0]
+            if cell_value == 'X':
+                itemslist = []
+                current_item_cell = current_cell
+                print("Нашли Х он находится в строке №", current_cell, "его значение:", mainDf.iloc[current_cell, 2])
+                try:
+                    while current_cell != 'X':
+                        # print("зашли в перебор элементов")
+                        # if not exists:
+                        itemslist.append(mainDf.iloc[current_item_cell+1, 2])
+                        print(itemslist)
+                        current_item_cell += 1
+                    current_item_cell = 0
+                    print("Дошли до заполнения второго писка")
+                    list1.append(itemslist)
+                    itemslist = []
+                except:
+                    print("Во время выполнения считывания Excel произошла ошибка:", Exception)
+                    print("Завершение программы считывания Excel")
+            else:
+                pass
+        print(list1)
+        "----------------------------------------"
+        try:
+            while combobox_need_func != 0:
+                for i in range(len(mainDf)):
+                    current_cell = mainDf.iloc[i, 0]
+                    if current_cell == 'X':
+                        # print("Мы поймали X")
+                        pass
+                    # list1.append("Разделить")
+                    else:
+                        # print("Мы поймали не Х")
+                        # print("Мы зашли в цикл заполнения списка данными")
+                        # print(mainDf.iloc[j, 2])
+                        list1.append(mainDf.iloc[i, 2])
+                        combobox_need_func -= 1
+                # else:
+                #     list1.append(current_cell)
+
+        except:
+            print("Во время выполнения считывания Excel произошла ошибка:", Exception)
+            print("Завершение программы считывания Excel")
+        print(list1)
+        """
